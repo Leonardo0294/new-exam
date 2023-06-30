@@ -13,14 +13,13 @@ const Reserva = sequelize.define(
       allowNull: false,
     },
     fechadevuelo: {
-      type: DataTypes.STRING,
+      type: DataTypes.DATE,
       allowNull: false,
     },
     numerodeboleto: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -38,5 +37,9 @@ const Reserva = sequelize.define(
     tableName: "reservas",
   }
 );
+
+(async () => {
+  await Reserva.sync();
+})();
 
 module.exports = Reserva;

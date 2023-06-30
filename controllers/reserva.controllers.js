@@ -1,9 +1,8 @@
-const reservaCtrl = {};
-const bcrypt = require("bcrypt");
+const ctrlReserva = {};
 const Reserva = require("../models/Reserva");
 
 // Controlador para crear nueva reserva
-reservaCtrl.crearUsuario = async (req, res) => {
+ctrlReserva.crearUsuario = async (req, res) => {
   const { quienreserva, codigoreserva, fechadevuelo, numerodeboleto } =
     req.body;
 
@@ -53,7 +52,7 @@ reservaCtrl.crearUsuario = async (req, res) => {
   }
 };
 
-reservaCtrl.obtenerReserva = async (req, res) => {
+ctrlReserva.obtenerReserva = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -76,7 +75,7 @@ reservaCtrl.obtenerReserva = async (req, res) => {
 };
 
 // Controlador para obtener todas las reservas
-reservaCtrl.obtenerReservas = async (req, res) => {
+ctrlReserva.obtenerReservas = async (req, res) => {
   try {
     const reservas = await reservas.findAll({
       where: {
@@ -100,7 +99,35 @@ reservaCtrl.obtenerReservas = async (req, res) => {
   }
 };
 
-reservaCtrl.actualizarReserva = async (req, res) => {
+// Ctrl para crear una reserva 
+ctrlReserva.crearReserva = async (req, res) => {
+    const { titulo, descripcion } = req.body;
+
+    try {
+        const reserva = await Reserva.create({
+            titulo,
+            descripcion,
+            reservaId: req.reserva.id
+        });
+
+        if (!reserva) {
+            throw ({
+                status: 400,
+                message: 'No se pudo crear la reserva'
+            })
+        }
+
+        return res.json(reserva);
+    } catch (error) {
+        console.log(error);
+        return res.status(error.status || 500).json(error.message || 'Error interno del servidor');
+    }
+}
+
+
+
+//Ctrl para actualizar una reserva
+ctrlReserva.actualizarReserva = async (req, res) => {
   const { id } = req.params;
 
   const { email, username } = req.body;
@@ -138,8 +165,9 @@ reservaCtrl.actualizarReserva = async (req, res) => {
   }
 };
 
+
 // Ctrl para eliminar una reserva de forma lógica
-reservaCtrl.eliminarReserva = async (req, res) => {
+ctrlReserva.eliminarReserva = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -177,4 +205,4 @@ reservaCtrl.eliminarReserva = async (req, res) => {
   }
 };
 
-module.exports = reservaCtrl;
+module.exports = ctrlReserva;
